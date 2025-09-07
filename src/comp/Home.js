@@ -9,6 +9,10 @@ export default function App() {
     // const [name, setName] = useState('');
     // const [value, setValue] = useState('');
 
+    const [isLoading, setIsLoading] = useState(false);
+    const [loadingMsg, setLoadingMsg] = useState('');
+    
+
     const [crunches, setCrunches] = useState('');
     const [crunchesCalories, setCrunchesCalories] = useState(0);
     const [walk, setWalk] = useState('');
@@ -30,33 +34,40 @@ export default function App() {
 
     const fetchData = async () => {
         try {
+            setLoadingMsg('Loading...');
+            setIsLoading(true);
+            
             const res = await axios.get(SHEET_URL);
-            setCumulativeTotalCalories(res.data[0][1]);
+
+            setCumulativeTotalCalories(Math.round(res.data[0][1] * 100) / 100);
             setCumulativeStars(Math.round(res.data[1][1] * 100) / 100);
-            // Math.round(num * 100) / 100; // 3.14
             setData(res.data.slice(3,));
+            setIsLoading(false)
         } catch (err) {
             console.error(err);
+            setIsLoading(false);
+            setLoadingMsg('');
         }
     };
 
     const submitData = async () => {
         const params = `writeData=${true}&` +
             `todayDate=${formattedDate}&` +
-            `crunches=${crunches}&` +
-            `crunchesCalories=${crunchesCalories}&` +
-            `walk=${walk}&` +
-            `walkCalories=${walkCalories}&` +
-            `justFit=${justFit}&` +
-            `justFitCalories=${justFitCalories}&` +
-            `vibrationPlate=${vibrationPlate}&` +
-            `vibrationPlateCalories=${vibrationPlateCalories}&` +
-            `planks=${planks}&` +
-            `planksCalories=${planksCalories}&` +
-            `totalCalories=${totalCalories}`;
-
-        console.log(params);
+            `crunches=${crunches || 0}&` +
+            `crunchesCalories=${crunchesCalories || 0}&` +
+            `walk=${walk || 0}&` +
+            `walkCalories=${walkCalories || 0}&` +
+            `justFit=${justFit || 0}&` +
+            `justFitCalories=${justFitCalories || 0}&` +
+            `vibrationPlate=${vibrationPlate || 0}&` +
+            `vibrationPlateCalories=${vibrationPlateCalories || 0}&` +
+            `planks=${planks || 0}&` +
+            `planksCalories=${planksCalories || 0}&` +
+            `totalCalories=${totalCalories || 0}`;
+        
         try {
+            setLoadingMsg('Saving your data!!!');
+            setIsLoading(true);
             await axios.get(`${SHEET_URL}?${params}`);
             setCrunches('');
             setWalk('');
@@ -64,8 +75,11 @@ export default function App() {
             setVibrationPlate('');
             setPlanks('');
             fetchData();
+            setIsLoading(false);
         } catch (err) {
             console.error(err);
+            setIsLoading(false);
+            setLoadingMsg('');
         }
     };
 
@@ -106,9 +120,8 @@ export default function App() {
         setPlanks(e.target.value);
     }
     useEffect(() => {
-        setPlanksCalories(planks * 1);
+        setPlanksCalories(planks * 10);
     }, [planks]);
-
 
 
     useEffect(() => {
@@ -125,7 +138,10 @@ export default function App() {
     }, []);
 
     return (
-        <div>
+        <>
+            {isLoading && 
+                <div className='loading-wrapper'>{loadingMsg}</div>
+            }
             <div className='app-title'>
                 Maggi's Calorie Tracker
             </div>
@@ -162,7 +178,6 @@ export default function App() {
                 Today's date: {formattedDate}
             </div>
 
-            {/* <h2>Maggi's Calorie Tracker</h2> */}
             <div className='wrapper'>
                 <div className='title'>Crunches</div>
                 <div className='input'>
@@ -209,22 +224,22 @@ export default function App() {
                     <input value={planks} onChange={planksChange}></input> mins
                 </div>
                 <div className='calories'>
-                    {planksCalories} calories (1 calorie/min)
+                    {planksCalories} calories (10 calories/min)
                 </div>
             </div>
 
             <div className='today-details'>
                 <div className='today-calories-details'>
-                    Today's Total Calories: {totalCalories}
+                    Today's Total Calories: {totalCalories} ( = {totalStars} stars)
                 </div>
-                <div className='today-stars-details'>
+                {/* <div className='today-stars-details'>
                     Today's Total Stars: {totalStars}
-                </div>
+                </div> */}
 
             </div>
             <div className='submit-button'>
                 <button onClick={submitData}>Submit</button>
             </div>
-        </div>
+        </>
     );
 }

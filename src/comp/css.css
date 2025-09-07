@@ -1,12 +1,26 @@
+.loading-wrapper {
+    background-color: lightgray;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    opacity: 0.9;
+    font-size: xx-large;
+}
+
 .app-title {
     font-size: 2em;
-    margin-block-end: 1rem;
+    margin-bottom: 0.5rem;
     font-weight: bold;
 }
 
 .lifetime-details {
     font-size: 1.25rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     font-weight: bold;
     /* background: green; */
     border-radius: 1rem;
@@ -15,12 +29,12 @@
 
 .today-date {
     font-weight: bold;
-    margin-bottom: 0.5rem;
+    margin: 0.5rem 0;
 }
 
 .wrapper {
-    padding: 0.5rem 0;
-    margin-bottom: 0.5rem;
+    /* padding: 0 0 0.5rem; */
+    margin-bottom: 1rem;
 
     .title {
         font-weight: bold;
@@ -42,13 +56,13 @@
 }
 
 .today-details {
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
 }
 
 .submit-button button {
     background: #27a6b9;
     border: none;
-    padding: 0.75rem 1rem 0.5rem;
+    padding: 0.75rem 1rem;
     font-size: 1rem;
     border-radius: 0.5rem;
     color: white;
