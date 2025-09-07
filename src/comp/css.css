@@ -1,0 +1,57 @@
+.app-title {
+    font-size: 2em;
+    margin-block-end: 1rem;
+    font-weight: bold;
+}
+
+.lifetime-details {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    /* background: green; */
+    border-radius: 1rem;
+    /* text-align: center; */
+}
+
+.today-date {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.wrapper {
+    padding: 0.5rem 0;
+    margin-bottom: 0.5rem;
+
+    .title {
+        font-weight: bold;
+    }
+
+    .input {
+        display: flex;
+        column-gap: 0.5rem;
+        margin: .25rem 0;
+
+        input {
+            width: 100%;
+        }
+    }
+
+    .calories {
+        font-size: 0.7rem;
+    }
+}
+
+.today-details {
+    margin-bottom: 0.5rem;
+}
+
+.submit-button button {
+    background: #27a6b9;
+    border: none;
+    padding: 0.75rem 1rem 0.5rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    color: white;
+    font-family: inherit;
+    font-size: 1.25rem;
+}
