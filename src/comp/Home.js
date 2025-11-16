@@ -1,46 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import "./css.css";
+import TodaysWorkout from './TodaysWorkout';
+import WorkoutHistory from './WorkoutHistory';
+import { getDateForSheet, getLongDate, roundOff } from './HelpFunctions';
 
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwb5ycYk_cyBzKDu3Z3ob6vbbp37xC8Qzx4J_jNxoyQdYSrYVBEI44w6NIFFl1_EAqEVw/exec';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwHih-zSRlM46of62oTFWguvyn3FQjFpQyzlkbU5o0yOw66DjnuWhVzk679n6NqXJoq/exec';
 
 export default function App() {
     const [data, setData] = useState([]);
-    // const [name, setName] = useState('');
-    // const [value, setValue] = useState('');
 
     const [isLoading, setIsLoading] = useState(false);
     const [loadingMsg, setLoadingMsg] = useState('');
-    
 
     const [crunches, setCrunches] = useState('');
     const [crunchesCalories, setCrunchesCalories] = useState(0);
     const [walk, setWalk] = useState('');
     const [walkCalories, setWalkCalories] = useState(0);
     const [justFit, setJustFit] = useState('');
-    const [justFitCalories, setJustFitCalories] = useState(0);
+    const [justFitCalories, setJustFitCalories] = useState('');
     const [vibrationPlate, setVibrationPlate] = useState('');
     const [vibrationPlateCalories, setVibrationPlateCalories] = useState(0);
     const [planks, setPlanks] = useState('');
     const [planksCalories, setPlanksCalories] = useState(0);
+    const [bike, setBike] = useState('');
+    const [bikeCalories, setBikeCalories] = useState(0);
+    const [row, setRow] = useState('');
+    const [rowCalories, setRowCalories] = useState(0);
 
     const [totalCalories, setTotalCalories] = useState(0);
     const [totalStars, setTotalStars] = useState(0);
     const [cumulativeTotalCalories, setCumulativeTotalCalories] = useState(0);
     const [cumulativeTotalStars, setCumulativeStars] = useState(0);
 
-    const today = new Date();
-    const formattedDate = today.toLocaleDateString();
-
     const fetchData = async () => {
         try {
-            setLoadingMsg('Loading...');
             setIsLoading(true);
-            
             const res = await axios.get(SHEET_URL);
-
-            setCumulativeTotalCalories(Math.round(res.data[0][1] * 100) / 100);
-            setCumulativeStars(Math.round(res.data[1][1] * 100) / 100);
+            setCumulativeTotalCalories(roundOff(res.data[0][1]));
+            setCumulativeStars(roundOff(res.data[1][1]));
             setData(res.data.slice(3,));
             setIsLoading(false)
         } catch (err) {
@@ -52,7 +49,7 @@ export default function App() {
 
     const submitData = async () => {
         const params = `writeData=${true}&` +
-            `todayDate=${formattedDate}&` +
+            `todayDate=${getDateForSheet()}&` +
             `crunches=${crunches || 0}&` +
             `crunchesCalories=${crunchesCalories || 0}&` +
             `walk=${walk || 0}&` +
@@ -63,8 +60,12 @@ export default function App() {
             `vibrationPlateCalories=${vibrationPlateCalories || 0}&` +
             `planks=${planks || 0}&` +
             `planksCalories=${planksCalories || 0}&` +
+            `bike=${bike || 0}&` +
+            `bikeCalories=${bikeCalories || 0}&` +
+            `row=${row || 0}&` +
+            `rowCalories=${rowCalories || 0}&` +
             `totalCalories=${totalCalories || 0}`;
-        
+
         try {
             setLoadingMsg('Saving your data!!!');
             setIsLoading(true);
@@ -72,10 +73,12 @@ export default function App() {
             setCrunches('');
             setWalk('');
             setJustFit('');
+            setJustFitCalories('');
             setVibrationPlate('');
             setPlanks('');
+            setBike('');
+            setRow('');
             fetchData();
-            setIsLoading(false);
         } catch (err) {
             console.error(err);
             setIsLoading(false);
@@ -84,162 +87,169 @@ export default function App() {
     };
 
     // CRUNCHES
-    const crunchesChange = (e) => {
-        setCrunches(e.target.value);
-    }
     useEffect(() => {
         setCrunchesCalories(crunches / 10);
     }, [crunches]);
 
     // WALK
-    const walkChange = (e) => {
-        setWalk(e.target.value);
-    }
     useEffect(() => {
         setWalkCalories(walk * 100);
     }, [walk]);
 
     // JUST FIT
-    const justFitChange = (e) => {
-        setJustFit(e.target.value);
-    }
-    useEffect(() => {
-        setJustFitCalories(justFit * 2);
-    }, [justFit]);
 
     // VIBRATION PLATE
-    const vibrationPlateChange = (e) => {
-        setVibrationPlate(e.target.value);
-    }
     useEffect(() => {
-        setVibrationPlateCalories(vibrationPlate * 5);
+        setVibrationPlateCalories(vibrationPlate * 2);
     }, [vibrationPlate]);
 
-    // JUST FIT
-    const planksChange = (e) => {
-        setPlanks(e.target.value);
-    }
+    // PLANKS
     useEffect(() => {
-        setPlanksCalories(planks * 10);
+        setPlanksCalories(roundOff(planks * 5 / 60));
     }, [planks]);
 
-
+    // BIKE
     useEffect(() => {
-        const total = crunchesCalories + walkCalories + justFitCalories;
-        setTotalCalories(total);
-    }, [crunchesCalories, walkCalories, justFitCalories]);
+        setBikeCalories(bike * 5);
+    }, [bike]);
 
+    // ROW
     useEffect(() => {
-        setTotalStars(totalCalories / 100);
+        setRowCalories(row * 8);
+    }, [row]);
+
+    // TOTAL CALORIES
+    useEffect(() => {
+        const total = crunchesCalories + walkCalories + (parseInt(justFitCalories) || 0) + vibrationPlateCalories + planksCalories + bikeCalories + rowCalories;
+        setTotalCalories(roundOff(total));
+    }, [crunchesCalories, walkCalories, justFitCalories, vibrationPlateCalories, planksCalories, bikeCalories, rowCalories]);
+
+    // TOTAL STARS
+    useEffect(() => {
+        setTotalStars(roundOff(totalCalories / 100));
     }, [totalCalories]);
 
+    // LOADING PAGE
     useEffect(() => {
+        setLoadingMsg('Loading...');
         fetchData();
     }, []);
 
+
+
     return (
         <>
-            {isLoading && 
+            {isLoading &&
                 <div className='loading-wrapper'>{loadingMsg}</div>
             }
             <div className='app-title'>
-                Maggi's Calorie Tracker
-            </div>
-
-            <div className='lifetime-details'>
-                <div className='lifetime-stars'>
-                    Lifetime Stars Earned: {cumulativeTotalStars}
+                <div className='app-title-maggie'>
+                    Maggi's
                 </div>
-                <div className='lifetime-calories'>
-                    Lifetime Calorie Burn: {cumulativeTotalCalories}
+                <div className='app-title-tracker'>
+                    Calorie Tracker
                 </div>
             </div>
 
-            {/* <div className='lifetime-details'>
-                <div className='lifetime-stars'>
-                    <div className='lifetime-stars-num'>
-                        {cumulativeTotalStars}
-                    </div>
-                    <div className='lifetime-stars-label'>
-                        Lifetime Stars Earned
-                    </div>
+            <div className='workout-details-summary-wrapper'>
+                <div className='workout-details-summary-container'>
+                    <div className='workout-details-summary-number'>{cumulativeTotalCalories}</div>
+                    <div className='workout-details-summary-label'>Calories</div>
                 </div>
-                <div className='lifetime-calories'>
-                    <div className='lifetime-calories-num'>
-                        {cumulativeTotalCalories}
-                    </div>
-                    <div className='lifetime-calories-label'>
-                        Lifetime Calorie Burn
-                    </div>
+                <div className='workout-details-summary-container'>
+                    <div className='workout-details-summary-number'>{cumulativeTotalStars}</div>
+                    <div className='workout-details-summary-label'>Stars</div>
                 </div>
-            </div> */}
+            </div>
 
             <div className="today-date">
-                Today's date: {formattedDate}
+                Today: {getLongDate()}
             </div>
 
             <div className='wrapper'>
                 <div className='title'>Crunches</div>
                 <div className='input'>
-                    <input value={crunches} onChange={crunchesChange}></input> nos.
+                    <input value={crunches} onChange={e => setCrunches(e.target.value)}></input> nos.
                 </div>
                 <div className='calories'>
-                    {crunchesCalories} calories (0.1 calorie/crunch)
+                    {crunchesCalories} Cals (1 Cal / 10 crunches)
                 </div>
             </div>
 
             <div className='wrapper'>
                 <div className='title'>Walk</div>
                 <div className='input'>
-                    <input value={walk} onChange={walkChange}></input> miles
+                    <input value={walk} onChange={e => setWalk(e.target.value)}></input> miles
                 </div>
                 <div className='calories'>
-                    {walkCalories} calories (100 calories/mile)
+                    {walkCalories} Cals (100 Cals / mile)
                 </div>
             </div>
 
             <div className='wrapper'>
                 <div className='title'>Just Fit</div>
                 <div className='input'>
-                    <input value={justFit} onChange={justFitChange}></input> mins
+                    <input placeholder='mins' value={justFit} onChange={e => setJustFit(e.target.value)}></input>
+                    <input placeholder='Calories' value={justFitCalories} onChange={e => setJustFitCalories(e.target.value)}></input>
                 </div>
                 <div className='calories'>
-                    {justFitCalories} calories (2 calories/min)
+                    {justFitCalories || 0} Cals (188 Cals / 24 mins)
                 </div>
             </div>
 
             <div className='wrapper'>
                 <div className='title'>Vibration Plate</div>
                 <div className='input'>
-                    <input value={vibrationPlate} onChange={vibrationPlateChange}></input> mins
+                    <input value={vibrationPlate} onChange={e => setVibrationPlate(e.target.value)}></input> mins
                 </div>
                 <div className='calories'>
-                    {vibrationPlateCalories} calories (5 calories/min)
+                    {vibrationPlateCalories} Cals (2 Cals / min)
                 </div>
             </div>
 
             <div className='wrapper'>
                 <div className='title'>Planks</div>
                 <div className='input'>
-                    <input value={planks} onChange={planksChange}></input> mins
+                    <input value={planks} onChange={e => setPlanks(e.target.value)}></input> secs
                 </div>
                 <div className='calories'>
-                    {planksCalories} calories (10 calories/min)
+                    {planksCalories} Cals (5 Cals / min)
+                </div>
+            </div>
+
+            <div className='wrapper'>
+                <div className='title'>Bike</div>
+                <div className='input'>
+                    <input value={bike} onChange={e => setBike(e.target.value)}></input> mins
+                </div>
+                <div className='calories'>
+                    {bikeCalories} Cals (5 Cals / min)
+                </div>
+            </div>
+
+            <div className='wrapper'>
+                <div className='title'>Row</div>
+                <div className='input'>
+                    <input value={row} onChange={e => setRow(e.target.value)}></input> mins
+                </div>
+                <div className='calories'>
+                    {rowCalories} Cals (8 Cals / min)
                 </div>
             </div>
 
             <div className='today-details'>
                 <div className='today-calories-details'>
-                    Today's Total Calories: {totalCalories} ( = {totalStars} stars)
+                    This session: {totalCalories} Cals ( = {roundOff(totalStars)} stars)
                 </div>
-                {/* <div className='today-stars-details'>
-                    Today's Total Stars: {totalStars}
-                </div> */}
-
             </div>
             <div className='submit-button'>
                 <button onClick={submitData}>Submit</button>
             </div>
+            <div className='homepage-workout-details-container'>
+                <TodaysWorkout data={data} />
+                <WorkoutHistory data={data} cumulativeTotalStars={cumulativeTotalStars} cumulativeTotalCalories={cumulativeTotalCalories} />
+            </div>
+
         </>
     );
 }

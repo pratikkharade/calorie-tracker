@@ -1,0 +1,90 @@
+.loading-wrapper {
+    background-color: lightgray;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    opacity: 0.9;
+    font-size: xx-large;
+}
+
+.app-title {
+    font-weight: bold;
+    font-family: fantasy;
+    text-align: center;
+
+    .app-title-maggie {
+        margin-bottom: -0.25rem;
+    }
+
+    .app-title-tracker {
+        font-size: xx-large;
+        margin-bottom: -0.5rem;
+    }
+}
+
+.today-date {
+    font-weight: bold;
+    margin: 0.5rem 0;
+}
+
+.wrapper {
+    margin-bottom: 0.75rem;
+
+    .title {
+        font-weight: bold;
+    }
+
+    .input {
+        display: flex;
+        column-gap: 0.5rem;
+        margin: .25rem 0;
+
+        input {
+            width: 100%;
+        }
+    }
+
+    .calories {
+        font-size: 0.7rem;
+    }
+}
+
+.today-details {
+    margin-bottom: 0.5rem;
+}
+
+.homepage-workout-details-container {
+    display: flex;
+
+    .workout-details-today,
+    .workout-details-history {
+        width: 100%;
+    }
+
+    .workout-details-history {
+        justify-content: end;
+        display: flex;
+    }
+}
+
+.submit-button {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+
+    button {
+        background: #27a6b9;
+        border: none;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        border-radius: 0.5rem;
+        color: white;
+        font-family: inherit;
+        font-size: 1.25rem;
+    }
+}

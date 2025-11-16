@@ -1,11 +1,11 @@
-import logo from './logo.svg';
 import './App.css';
+import './comp/Home.css';
+import './comp/Workout.css';
 import SheetForm from './comp/Home';
 
 function App() {
   return (
     <div className="App">
-      {/* <img src={logo} className="App-logo" alt="logo" /> */}
       <SheetForm />
     </div>
   );
