@@ -19,6 +19,7 @@
 
     img.logo {
         width: 65%;
+        max-width: 20rem;
     }
 
     .app-title-maggie {
