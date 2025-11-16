@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import logo from './calTrac_logo.png';
 import TodaysWorkout from './TodaysWorkout';
 import WorkoutHistory from './WorkoutHistory';
 import { getDateForSheet, getLongDate, roundOff } from './HelpFunctions';
@@ -143,12 +144,13 @@ export default function App() {
                 <div className='loading-wrapper'>{loadingMsg}</div>
             }
             <div className='app-title'>
-                <div className='app-title-maggie'>
+                <img src={logo} className='logo'></img>
+                {/* <div className='app-title-maggie'>
                     Maggi's
                 </div>
                 <div className='app-title-tracker'>
                     Calorie Tracker
-                </div>
+                </div> */}
             </div>
 
             <div className='workout-details-summary-wrapper'>

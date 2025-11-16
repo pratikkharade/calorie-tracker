@@ -17,6 +17,10 @@
     font-family: fantasy;
     text-align: center;
 
+    img.logo {
+        width: 65%;
+    }
+
     .app-title-maggie {
         margin-bottom: -0.25rem;
     }
