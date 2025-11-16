@@ -166,74 +166,76 @@ export default function App() {
                 Today: {getLongDate()}
             </div>
 
-            <div className='wrapper'>
-                <div className='title'>Crunches</div>
-                <div className='input'>
-                    <input value={crunches} onChange={e => setCrunches(e.target.value)}></input> nos.
+            <div className='wrapper-container'>
+                <div className='wrapper'>
+                    <div className='title'>Crunches</div>
+                    <div className='input'>
+                        <input value={crunches} onChange={e => setCrunches(e.target.value)}></input> nos.
+                    </div>
+                    <div className='calories'>
+                        {crunchesCalories} Cals (1 Cal / 10 crunches)
+                    </div>
                 </div>
-                <div className='calories'>
-                    {crunchesCalories} Cals (1 Cal / 10 crunches)
-                </div>
-            </div>
 
-            <div className='wrapper'>
-                <div className='title'>Walk</div>
-                <div className='input'>
-                    <input value={walk} onChange={e => setWalk(e.target.value)}></input> miles
+                <div className='wrapper'>
+                    <div className='title'>Walk</div>
+                    <div className='input'>
+                        <input value={walk} onChange={e => setWalk(e.target.value)}></input> miles
+                    </div>
+                    <div className='calories'>
+                        {walkCalories} Cals (100 Cals / mile)
+                    </div>
                 </div>
-                <div className='calories'>
-                    {walkCalories} Cals (100 Cals / mile)
-                </div>
-            </div>
 
-            <div className='wrapper'>
-                <div className='title'>Just Fit</div>
-                <div className='input'>
-                    <input placeholder='mins' value={justFit} onChange={e => setJustFit(e.target.value)}></input>
-                    <input placeholder='Calories' value={justFitCalories} onChange={e => setJustFitCalories(e.target.value)}></input>
+                <div className='wrapper'>
+                    <div className='title'>Just Fit</div>
+                    <div className='input'>
+                        <input placeholder='mins' value={justFit} onChange={e => setJustFit(e.target.value)}></input>
+                        <input placeholder='Calories' value={justFitCalories} onChange={e => setJustFitCalories(e.target.value)}></input>
+                    </div>
+                    <div className='calories'>
+                        {justFitCalories || 0} Cals (188 Cals / 24 mins)
+                    </div>
                 </div>
-                <div className='calories'>
-                    {justFitCalories || 0} Cals (188 Cals / 24 mins)
-                </div>
-            </div>
 
-            <div className='wrapper'>
-                <div className='title'>Vibration Plate</div>
-                <div className='input'>
-                    <input value={vibrationPlate} onChange={e => setVibrationPlate(e.target.value)}></input> mins
+                <div className='wrapper'>
+                    <div className='title'>Vibration Plate</div>
+                    <div className='input'>
+                        <input value={vibrationPlate} onChange={e => setVibrationPlate(e.target.value)}></input> mins
+                    </div>
+                    <div className='calories'>
+                        {vibrationPlateCalories} Cals (2 Cals / min)
+                    </div>
                 </div>
-                <div className='calories'>
-                    {vibrationPlateCalories} Cals (2 Cals / min)
-                </div>
-            </div>
 
-            <div className='wrapper'>
-                <div className='title'>Planks</div>
-                <div className='input'>
-                    <input value={planks} onChange={e => setPlanks(e.target.value)}></input> secs
+                <div className='wrapper'>
+                    <div className='title'>Planks</div>
+                    <div className='input'>
+                        <input value={planks} onChange={e => setPlanks(e.target.value)}></input> secs
+                    </div>
+                    <div className='calories'>
+                        {planksCalories} Cals (5 Cals / min)
+                    </div>
                 </div>
-                <div className='calories'>
-                    {planksCalories} Cals (5 Cals / min)
-                </div>
-            </div>
 
-            <div className='wrapper'>
-                <div className='title'>Bike</div>
-                <div className='input'>
-                    <input value={bike} onChange={e => setBike(e.target.value)}></input> mins
+                <div className='wrapper'>
+                    <div className='title'>Bike</div>
+                    <div className='input'>
+                        <input value={bike} onChange={e => setBike(e.target.value)}></input> mins
+                    </div>
+                    <div className='calories'>
+                        {bikeCalories} Cals (5 Cals / min)
+                    </div>
                 </div>
-                <div className='calories'>
-                    {bikeCalories} Cals (5 Cals / min)
-                </div>
-            </div>
 
-            <div className='wrapper'>
-                <div className='title'>Row</div>
-                <div className='input'>
-                    <input value={row} onChange={e => setRow(e.target.value)}></input> mins
-                </div>
-                <div className='calories'>
-                    {rowCalories} Cals (8 Cals / min)
+                <div className='wrapper'>
+                    <div className='title'>Row</div>
+                    <div className='input'>
+                        <input value={row} onChange={e => setRow(e.target.value)}></input> mins
+                    </div>
+                    <div className='calories'>
+                        {rowCalories} Cals (8 Cals / min)
+                    </div>
                 </div>
             </div>
 
