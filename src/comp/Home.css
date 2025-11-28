@@ -10,6 +10,7 @@
     display: flex;
     opacity: 0.9;
     font-size: xx-large;
+    z-index: 999;
 }
 
 .app-title {
@@ -55,9 +56,14 @@
         display: flex;
         column-gap: 0.5rem;
         margin: .25rem 0;
+        line-height: 1.5rem;
+
 
         input {
             width: 100%;
+            border: none;
+            height: 1.5rem;
+            border-radius: 0.25rem;
         }
     }
 
@@ -85,6 +91,10 @@
     }
 }
 
+.hamberger-wrapper {
+    position: fixed;
+}
+
 .submit-button {
     display: flex;
     justify-content: center;
@@ -93,7 +103,7 @@
     button {
         background: #27a6b9;
         border: none;
-        padding: 0.75rem 1rem;
+        padding: 0.5rem 0.75rem;
         font-size: 1rem;
         border-radius: 0.5rem;
         color: white;

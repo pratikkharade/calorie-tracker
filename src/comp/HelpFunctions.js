@@ -8,11 +8,11 @@ export const getDateForSheet = () => {
     return `${day}-${month}-${year}`;
 }
 
-export const getShortDate = () => {
-    const today = new Date();
+// export const getShortDate = () => {
+//     const today = new Date();
 
-    return today.toLocaleDateString();
-}
+//     return today.toLocaleDateString();
+// }
 
 export const getLongDate = (date) => {
     const today = date || new Date();
@@ -45,4 +45,29 @@ export const formatData = (data) => {
     }
 
     return Object.entries(grouped).map(([date, sums]) => [date, ...sums]);
+}
+
+export const formatTodaysData = (data) => {
+    if (!data || data.length === 0) return;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    return data.filter((item, idx) => {
+        let thisDate = new Date(item[0]);
+        thisDate.setHours(0, 0, 0, 0);
+        if (today.getTime() === thisDate.getTime()) {
+            return item;
+        }
+    })[0];
+}
+
+export const formatWorkoutHistoryData = (data) => {
+    if (!data || (data.length === 0)) return;
+    const formattedData = formatData(data);
+    formattedData.forEach((item, idx) => {
+        item[0] = getLongDate(new Date(item[0]));
+    });
+    
+    return formattedData.reverse();
 }

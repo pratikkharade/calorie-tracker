@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import logo from './calTrac_logo.png';
-import TodaysWorkout from './TodaysWorkout';
-import WorkoutHistory from './WorkoutHistory';
-import { getDateForSheet, getLongDate, roundOff } from './HelpFunctions';
+import TodaysWorkout from './Hamberger/TodaysWorkout';
+import WorkoutHistory from './Hamberger/WorkoutHistory';
+import { getDateForSheet, getLongDate, roundOff, formatTodaysData, formatWorkoutHistoryData } from './HelpFunctions';
+import HamburgerMenu from './Hamberger/Hamburger';
+import Summary from './Summary/Summary';
 
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwHih-zSRlM46of62oTFWguvyn3FQjFpQyzlkbU5o0yOw66DjnuWhVzk679n6NqXJoq/exec';
 
 export default function App() {
     const [data, setData] = useState([]);
+    const [todaysData, setTodaysData] = useState([]);
+    const [workoutHistoryData, setWorkoutHistoryData] = useState([]);
 
     const [isLoading, setIsLoading] = useState(false);
     const [loadingMsg, setLoadingMsg] = useState('');
@@ -28,6 +32,8 @@ export default function App() {
     const [row, setRow] = useState('');
     const [rowCalories, setRowCalories] = useState(0);
 
+    const [hamburgerActive, setHamburgerActive] = useState(false);
+
     const [totalCalories, setTotalCalories] = useState(0);
     const [totalStars, setTotalStars] = useState(0);
     const [cumulativeTotalCalories, setCumulativeTotalCalories] = useState(0);
@@ -37,8 +43,8 @@ export default function App() {
         try {
             setIsLoading(true);
             const res = await axios.get(SHEET_URL);
-            setCumulativeTotalCalories(roundOff(res.data[0][1]));
-            setCumulativeStars(roundOff(res.data[1][1]));
+            setCumulativeTotalCalories(roundOff(res.data[0][1]) % 30000);
+            setCumulativeStars(roundOff(res.data[1][1]) % 300);
             setData(res.data.slice(3,));
             setIsLoading(false)
         } catch (err) {
@@ -136,6 +142,23 @@ export default function App() {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        console.log("Data changed...");
+        // setTodaysData(formatTodaysData(data));
+        setWorkoutHistoryData(formatWorkoutHistoryData(data));
+    }, [data]);
+
+    useEffect(() => {
+        if (workoutHistoryData && workoutHistoryData.length) {
+            setTodaysData(formatTodaysData(workoutHistoryData));
+        }
+    }, [workoutHistoryData])
+
+
+    const hamburgerMenuClose = () => {
+        setHamburgerActive(false);
+    }
+
 
 
     return (
@@ -145,24 +168,15 @@ export default function App() {
             }
             <div className='app-title'>
                 <img src={logo} className='logo'></img>
-                {/* <div className='app-title-maggie'>
-                    Maggi's
-                </div>
-                <div className='app-title-tracker'>
-                    Calorie Tracker
-                </div> */}
+            </div>
+            <div className='hamberger-wrapper'>
+                <HamburgerMenu onSelect={setHamburgerActive} />
+
+                {hamburgerActive === "today" && <TodaysWorkout data={todaysData} hamburgerMenuClose={hamburgerMenuClose} />}
+                {hamburgerActive === "history" && <WorkoutHistory data={workoutHistoryData} cumulativeTotalStars={cumulativeTotalStars} cumulativeTotalCalories={cumulativeTotalCalories} hamburgerMenuClose={hamburgerMenuClose} />}
             </div>
 
-            <div className='workout-details-summary-wrapper'>
-                <div className='workout-details-summary-container'>
-                    <div className='workout-details-summary-number'>{cumulativeTotalCalories}</div>
-                    <div className='workout-details-summary-label'>Calories</div>
-                </div>
-                <div className='workout-details-summary-container'>
-                    <div className='workout-details-summary-number'>{cumulativeTotalStars}</div>
-                    <div className='workout-details-summary-label'>Stars</div>
-                </div>
-            </div>
+            < Summary totalCalories={cumulativeTotalCalories} totalStars={cumulativeTotalStars} />
 
             <div className="today-date">
                 Today: {getLongDate()}
@@ -249,10 +263,11 @@ export default function App() {
             <div className='submit-button'>
                 <button onClick={submitData}>Submit</button>
             </div>
-            <div className='homepage-workout-details-container'>
+            {/* <TodaysWorkout data={data} /> */}
+            {/* <div className='homepage-workout-details-container'>
                 <TodaysWorkout data={data} />
                 <WorkoutHistory data={data} cumulativeTotalStars={cumulativeTotalStars} cumulativeTotalCalories={cumulativeTotalCalories} />
-            </div>
+            </div> */}
 
         </>
     );

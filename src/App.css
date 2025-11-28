@@ -6,6 +6,7 @@
   position: absolute;
   width: 100%;
   box-sizing: border-box;
+  font-family: 'Arial Rounded MT Bold';
 }
 
 .App-logo {
