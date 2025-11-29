@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/calorie-tracker/static/css/main.9a47560f.css",
-    "main.js": "/calorie-tracker/static/js/main.9c72dfee.js",
+    "main.css": "/calorie-tracker/static/css/main.561f3362.css",
+    "main.js": "/calorie-tracker/static/js/main.6901741b.js",
     "static/js/453.4ee0fcc5.chunk.js": "/calorie-tracker/static/js/453.4ee0fcc5.chunk.js",
     "static/media/calTrac_logo.png": "/calorie-tracker/static/media/calTrac_logo.1a5b6ffb3af27495ab9c.png",
     "index.html": "/calorie-tracker/index.html",
-    "main.9a47560f.css.map": "/calorie-tracker/static/css/main.9a47560f.css.map",
-    "main.9c72dfee.js.map": "/calorie-tracker/static/js/main.9c72dfee.js.map",
+    "main.561f3362.css.map": "/calorie-tracker/static/css/main.561f3362.css.map",
+    "main.6901741b.js.map": "/calorie-tracker/static/js/main.6901741b.js.map",
     "453.4ee0fcc5.chunk.js.map": "/calorie-tracker/static/js/453.4ee0fcc5.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.9a47560f.css",
-    "static/js/main.9c72dfee.js"
+    "static/css/main.561f3362.css",
+    "static/js/main.6901741b.js"
   ]
 }
