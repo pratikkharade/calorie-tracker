@@ -1,0 +1,20 @@
+.workout-details-summary-wrapper {
+    display: flex;
+    border-bottom: 1px solid;
+    padding-bottom: 0.5rem;
+
+    .workout-details-summary-container {
+        width: 100%;
+    }
+
+    .workout-details-summary-number,
+    .workout-details-summary-label {
+        display: flex;
+        font-weight: bold;
+        justify-content: center;
+    }
+
+    .workout-details-summary-number {
+        font-size: xx-large;
+    }
+}

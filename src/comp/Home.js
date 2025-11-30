@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import logo from './calTrac_logo.png';
-import TodaysWorkout from './Hamberger/TodaysWorkout';
-import WorkoutHistory from './Hamberger/WorkoutHistory';
-import { getDateForSheet, getLongDate, roundOff, formatTodaysData, formatWorkoutHistoryData } from './HelpFunctions';
-import HamburgerMenu from './Hamberger/Hamburger';
+import WorkoutHistory from './WorkoutHistory/WorkoutHistory';
+import { getDateForSheet, getLongDate, roundOff, formatWorkoutHistoryData } from './HelpFunctions';
 import Summary from './Summary/Summary';
+import sheets from "./../config.json";
 
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwHih-zSRlM46of62oTFWguvyn3FQjFpQyzlkbU5o0yOw66DjnuWhVzk679n6NqXJoq/exec';
+const SHEET_1_URL = sheets.sheet_1;
 
 export default function App() {
     const [data, setData] = useState([]);
-    const [todaysData, setTodaysData] = useState([]);
     const [workoutHistoryData, setWorkoutHistoryData] = useState([]);
 
     const [isLoading, setIsLoading] = useState(false);
@@ -32,8 +30,6 @@ export default function App() {
     const [row, setRow] = useState('');
     const [rowCalories, setRowCalories] = useState(0);
 
-    const [hamburgerActive, setHamburgerActive] = useState(false);
-
     const [totalCalories, setTotalCalories] = useState(0);
     const [totalStars, setTotalStars] = useState(0);
     const [cumulativeTotalCalories, setCumulativeTotalCalories] = useState(0);
@@ -42,7 +38,7 @@ export default function App() {
     const fetchData = async () => {
         try {
             setIsLoading(true);
-            const res = await axios.get(SHEET_URL);
+            const res = await axios.get(SHEET_1_URL);
             setCumulativeTotalCalories(roundOff(res.data[0][1]) % 30000);
             setCumulativeStars(roundOff(res.data[1][1]) % 300);
             setData(res.data.slice(3,));
@@ -76,7 +72,7 @@ export default function App() {
         try {
             setLoadingMsg('Saving your data!!!');
             setIsLoading(true);
-            await axios.get(`${SHEET_URL}?${params}`);
+            await axios.get(`${SHEET_1_URL}?${params}`);
             setCrunches('');
             setWalk('');
             setJustFit('');
@@ -143,23 +139,9 @@ export default function App() {
     }, []);
 
     useEffect(() => {
-        console.log("Data changed...");
-        // setTodaysData(formatTodaysData(data));
-        setWorkoutHistoryData(formatWorkoutHistoryData(data));
+        const workoutHistory = formatWorkoutHistoryData(data);
+        setWorkoutHistoryData(workoutHistory);
     }, [data]);
-
-    useEffect(() => {
-        if (workoutHistoryData && workoutHistoryData.length) {
-            setTodaysData(formatTodaysData(workoutHistoryData));
-        }
-    }, [workoutHistoryData])
-
-
-    const hamburgerMenuClose = () => {
-        setHamburgerActive(false);
-    }
-
-
 
     return (
         <>
@@ -169,11 +151,8 @@ export default function App() {
             <div className='app-title'>
                 <img src={logo} className='logo'></img>
             </div>
-            <div className='hamberger-wrapper'>
-                <HamburgerMenu onSelect={setHamburgerActive} />
-
-                {hamburgerActive === "today" && <TodaysWorkout data={todaysData} hamburgerMenuClose={hamburgerMenuClose} />}
-                {hamburgerActive === "history" && <WorkoutHistory data={workoutHistoryData} cumulativeTotalStars={cumulativeTotalStars} cumulativeTotalCalories={cumulativeTotalCalories} hamburgerMenuClose={hamburgerMenuClose} />}
+            <div className='history-wrapper'>
+                {workoutHistoryData && <WorkoutHistory data={workoutHistoryData} totalStars={cumulativeTotalStars} totalCalories={cumulativeTotalCalories} />}
             </div>
 
             < Summary totalCalories={cumulativeTotalCalories} totalStars={cumulativeTotalStars} />
@@ -263,12 +242,6 @@ export default function App() {
             <div className='submit-button'>
                 <button onClick={submitData}>Submit</button>
             </div>
-            {/* <TodaysWorkout data={data} /> */}
-            {/* <div className='homepage-workout-details-container'>
-                <TodaysWorkout data={data} />
-                <WorkoutHistory data={data} cumulativeTotalStars={cumulativeTotalStars} cumulativeTotalCalories={cumulativeTotalCalories} />
-            </div> */}
-
         </>
     );
 }

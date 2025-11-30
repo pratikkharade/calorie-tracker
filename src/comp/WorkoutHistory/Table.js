@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { roundOff } from '../HelpFunctions';
 
 function Table(props) {
     const item = props.data;
+    
     return (
-        <div>
+        <>
             <div className='item'>
                 <div>Crunches</div>
                 <div>{`${item[1]} ct.`}</div>
@@ -45,7 +46,7 @@ function Table(props) {
                 <div>{`${roundOff(item[15])} Cals`} </div>
                 <div>{`(${roundOff(item[15] / 100)} stars)`}</div>
             </div>
-        </div>
+        </>
     )
 }
 
